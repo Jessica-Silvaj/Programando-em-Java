@@ -18,7 +18,7 @@ public class PrimeiroPrograma {
         // TODO code application logic here
         
         //Declaração de variavel
-         int idadeAluno, idadeProfessor ,  totalIdade;
+        int idadeAluno, idadeProfessor ,  totalIdade;
         idadeAluno = 20;
         idadeProfessor = 30;
         

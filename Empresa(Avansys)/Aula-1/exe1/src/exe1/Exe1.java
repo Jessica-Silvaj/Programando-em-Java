@@ -25,7 +25,7 @@ public class Exe1 {
         //Imprimir algo na tela/Console
         System.out.println("O nome da cidade é " + nomeCidade);
         System.out.println(nomeCidade +" foi fundada em "+ anoFundacao);
-        System.out.println("Nesse exato momento " + nomeCidade + " tem " +quantidadeHabitantes + " Habitantes");
+        System.out.println("Nesse exato momento " + nomeCidade + " tem " + quantidadeHabitantes + " Habitantes");
     }
     
 }
