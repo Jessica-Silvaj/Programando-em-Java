@@ -30,6 +30,8 @@ public class EntradaDeDados {
         sobrenome = teclado.nextLine();
         
         System.out.println("Olá " + nome + " " + sobrenome);
+        
+        
     }
     
 }
