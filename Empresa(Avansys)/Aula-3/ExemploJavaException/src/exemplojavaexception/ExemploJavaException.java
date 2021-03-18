@@ -19,6 +19,8 @@ public class ExemploJavaException {
     public static void main(String[] args) {
         // Exemplo de tratamento de exeção
         
+        //Caso o Denominador for zero, ocorrerá um erro
+        
          Scanner teclado = new Scanner(System.in);
         
         System.out.println("Digite um numerador:  ");
@@ -43,7 +45,7 @@ public class ExemploJavaException {
         System.out.println("Resultado da divisão: " + divisao);
         } catch (ArithmeticException erro) {
             
-            System.err.println(" Ocorreu um Erro ou uma exceção " + erro.getMessage());
+            System.err.println(" Ocorreu um Erro, pois usou o denominado zero ou ocorreu uma exceção " + erro.getMessage());
         
         }
         
