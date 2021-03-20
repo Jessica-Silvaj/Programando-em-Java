@@ -8,23 +8,30 @@ public class Cliente {
     
      private String Nomecliente;
      private int Idade;
-     private long Cpf;
+     private String Cpf;
      
+     //Construtor
      public Cliente(){
      
          this.Nomecliente = " ";
          this.Idade = 0;
-         this.Cpf = Cpf;
+         this.Cpf = " ";
      
      }   
 
-    public Long getCpf() {
+    public String getCpf() {
         return Cpf;
     }
 
-    public void setCpf(Long Cpf) {
-            
-        this.Cpf = Cpf;
+    public void setCpf(String Cpf) {
+             if (Cpf.length() == 11){
+                 
+                this.Cpf = Cpf;
+                
+             }else{
+                 System.out.println("Erro, cpf invalido");
+             }
+     
         
     }
     

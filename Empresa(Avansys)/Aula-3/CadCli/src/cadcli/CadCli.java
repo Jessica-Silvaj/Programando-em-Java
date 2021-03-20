@@ -35,7 +35,7 @@ public class CadCli {
          System.out.print("\n");
          
         System.out.println("* Informe o seu cpf: ");
-         cliente.setCpf(teclado.nextLong());
+         cliente.setCpf(teclado.nextLine());
          System.out.print("\n");
          
          System.out.println("------------//---------------------// ---------//");
