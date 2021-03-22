@@ -32,7 +32,7 @@ public class Disciplina {
         
     }
     
-    public void ImprimirNomes (Alunos alunos){
+    public void ImprimirNomes (Alunos  alunos){
         
     if(mediaAluno >= 7) {
         
