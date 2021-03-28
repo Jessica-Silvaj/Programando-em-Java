@@ -1,0 +1,32 @@
+Fazer um bd  escola
+a- tabela Alunos
+b- tabela Disciplinas
+c- tabela Matriculas
+-------------------------------------
+create database Escola_2;
+
+create table  Alunos (
+   id_Aluno integer not null,
+   nome_Aluno varchar(30),
+   cpf float unique,
+   primary key(id_Aluno)
+	
+);
+
+create table Disciplinas (
+   id_Disciplinas integer not null,
+   nome_Disciplina varchar(30),
+	
+	primary key (id_Disciplinas)
+	
+);
+create table Matriculas(
+  id_Aluno integer,
+  id_Disciplinas integer,
+  semestre varchar(5),
+	
+	primary key (id_Aluno, id_Disciplinas, semestre ),
+	Foreign key (id_Aluno) references Alunos (id_Aluno),
+	Foreign key (id_Disciplinas) references Disciplinas ( id_Disciplinas)
+	
+);

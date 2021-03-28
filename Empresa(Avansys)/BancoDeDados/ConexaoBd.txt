@@ -1,0 +1,14 @@
+Create database ConexaoJava;
+
+--Tabela Clientes
+Create table clientes (
+    id_clientes serial not null,
+	nome_clientes varchar(50),
+	email varchar(50),
+	data_Nascimento date,
+	
+	Primary key (id_clientes)
+	
+);
+
+select *  from clientes;

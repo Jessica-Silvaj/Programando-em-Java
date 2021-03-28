@@ -1,0 +1,42 @@
+cria uma base de dado com nome clinica onde ela devera conter 3 tabelas
+a - tabela paciênte
+b - tabela médico
+c - tabela consulta
+--------------------------------------
+
+create database clinica_2;
+
+create table Paciente(
+  id_Paciente integer not null,
+  nome_Paciente varchar(30),
+  cpf float,
+	
+Primary key (id_Paciente)
+);
+
+create table Medico(
+	id_Medico integer not null,
+	nome_Medico varchar(30),
+	cpf float,
+	Primary key (id_Medico)
+	
+);
+
+create table consulta(
+	id_Paciente integer,
+	id_Medico integer,
+	datahora timestamp,
+	primary key (id_Paciente, id_Medico, datahora),
+	Foreign key (id_Paciente) references Paciente (id_Paciente),
+	foreign key  (id_Medico ) references Medico (id_Medico)
+);
+
+insert into Paciente (id_Paciente, nome_Paciente , cpf) values
+( 1, 'Jessica', 05548778945);
+
+insert into Medico(id_Medico, nome_Medico, cpf) values
+( 1, 'Sarah', 05578712354);
+
+insert into consulta (id_Paciente, id_Medico, cpf) values
+( 1, '1, current_timestamp);
+

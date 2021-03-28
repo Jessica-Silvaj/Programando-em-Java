@@ -1,0 +1,13 @@
+ Adicionar Coluna na tabela e apagar
+
+alter table Alunos add column idade integer;
+alter table Alunos drop column idade;
+
+// selecionar tabela
+ select * from aluno;
+
+Atualizar
+update  aluno set nome = 'pedro Alves';
+
+atualizar usando where
+update  aluno set nome = 'pedro Alves' wherw id = 1;

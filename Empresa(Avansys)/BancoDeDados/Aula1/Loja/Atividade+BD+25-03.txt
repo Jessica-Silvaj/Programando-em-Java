@@ -1,0 +1,32 @@
+create database loja;
+
+create table cliente (
+	idCliente integer not null,
+	nomeCliente varchar(50),
+	dataNasc date,
+	
+	Primary key (idCliente)
+
+);
+
+create table pedido(
+	
+  idPedido integer not null,
+	idCliente integer,
+	valor_Pedido float,
+	data_Pedido date,
+	desc_Produto varchar(50),
+	Primary key (idPedido),
+	Foreign key (idCliente) references cliente(idCliente)
+);
+
+drop table pedido;
+insert into cliente (idCliente, nomeCliente, dataNasc) values
+(1, 'Pedro Souza','21/07/1998'),
+(2,'Viniciu Santos', '15/12/1970'),
+(3, 'Jessica Silva', '21/07/2000');
+
+insert into pedido(idPedido, idCliente, valor_Pedido, data_Pedido, desc_Produto) values
+(1 , 1 , 30.00 , '25/03/2020', 'Livro de Programação em Java'),
+(2, 2, 450.00 , '30/07/2008', 'Apostila sobre Inteligência Artificial'),
+(3 , 3, 120.00, '21/03/2012', 'Kit de livros completos da sagar Harry Potter');

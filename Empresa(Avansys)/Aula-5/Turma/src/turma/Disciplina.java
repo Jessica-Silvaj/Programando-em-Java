@@ -34,22 +34,23 @@ public class Disciplina {
     
     public void ImprimirNomes (Alunos  alunos){
         
-    if(mediaAluno >= 7) {
-        
-         System.out.println("** Alunos a cima da média **");
-         System.out.println("Disciplina: " + this.nomeDisciplina);
-         System.out.println("Aluno(a):"+alunos.getNomeAluno());
-         System.out.println("Nota:  "+this.getmediaAluno());
+   if(mediaAluno >= 7) {
+      
+        System.out.println("** Alunos a cima da média **");
+        System.out.println("Disciplina: " + this.nomeDisciplina);
+        System.out.println("Aluno(a):"+ alunos.getNomeAluno());
+       System.out.println("Nota:  "+this.getmediaAluno());
+      
+   } else {
+   
+       System.out.println(" **Alunos a baixo da média**");
+       System.out.println(" Disciplina: " + this.nomeDisciplina);
+       System.out.println(" Aluno(a):"+alunos.getNomeAluno());
+       System.out.println("Nota:  "+this.getmediaAluno());       
+   }
        
-    } else {
-    
-         System.out.println(" **Alunos a baixo da média**");
-         System.out.println(" Disciplina: " + this.nomeDisciplina);
-         System.out.println(" Aluno(a):"+alunos.getNomeAluno());
-         System.out.println("Nota:  "+this.getmediaAluno());
-        
+   }
+
+
     }
-        
-    }
-    
-}
+
