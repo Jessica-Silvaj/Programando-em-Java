@@ -1,0 +1,57 @@
+ -- 1.
+select m.nome, m.Cpf from Medicos as m inner join Pacientes as P on
+P.codp = m.codm;
+
+-- 2.
+
+select f.codf, f.nome from funcionarios as f inner join
+ Medicos as m on f.cidade = m.cidade;
+
+
+-- 3.
+
+select p.codp, p.nome, hora
+from Pacientes as p inner join Consultas as c on
+p.codp = c.codm where hora > '14:00';
+
+-- 4.
+
+select a.nroa, a.andar, m.nome from Ambulatorios as a
+inner join Medicos as m on a.nroa = m.codm where especialidade = 'ortopedia';
+
+
+-- 5.
+
+select p.nome, p.Cpf, data from Pacientes as p inner join Consultas c on
+p.codp = c.codp where data between '14/06/2006' and '16/06/2006';
+
+-- 6
+
+
+-- 7.
+
+select m.codm, m.nome from Medicos as m inner join Ambulatorios as a on
+m.nroa = a.nroa inner join Consultas as c on
+m.codm = c.codm inner join Pacientes p on c.codp = p.codp
+where c.data = '2006-06-14'
+and a.nroa in (
+
+   select a.nroa from Medicos as m 
+	inner join Ambulatorios as a on m.nroa = a.nroa
+	inner join Consultas c on m.codm = c.codm where m.nome = 'Pedro'
+);
+
+-- 8.
+
+SELECT p.nome, p.CPF, p.idade
+FROM consultas AS c
+INNER JOIN pacientes AS p
+ON p.codp = c.codp
+INNER JOIN medicos AS m
+ON m.codm = c.codm
+WHERE m.especialidade = 'ortopedia' AND EXTRACT(DAY FROM c.data) < 16;
+
+--9.
+
+-- 10
+

@@ -1,0 +1,170 @@
+-- Atividade de subConsultas
+
+--Resolva o que se pede utilizando subconsultas IN:
+
+-- 1. nome e CPF dos médicos que também são pacientes do hospital
+        
+		Select m.nome, m.Cpf from Medicos as m
+		where m.nome in (
+			
+		Select p.nome from Pacientes as p
+		where m.nome = p.nome
+			
+		);
+		
+		select * from Medicos;
+		select * from Pacientes;
+
+
+
+-- 2. código e nome dos pacientes com consulta marcada para horários após às 14 horas
+       
+	   Select p.codp , p.nome from Pacientes as p
+	   where p.codp in(
+		   
+	    select c.codp from Consultas as c 
+		  where p.codp = c.codp  and  hora > '14:00'   
+	   );
+	   
+	   select * from Consultas where hora > '14:00';
+
+
+-- 3. nome e idade dos médicos que têm consulta com a paciente Ana
+    
+	  select m.nome, m.idade from Medicos as m
+		 inner join Consultas as c on m.codm = c.codm
+		 where c.codp in (
+		 
+			 Select p.codp from Pacientes as p
+			 where c.codp = p.codp and p.nome = 'Ana'
+		 )
+		
+		select * from Consultas;
+		
+
+-- 4. número e andar dos ambulatórios onde nenhum médico dá atendimento
+    
+        select a.nroa, a.andar from Ambulatorios as a
+        where a.nroa not in(
+			
+	    select m.nroa from Medicos as m
+	    where m.nroa = a.nroa
+		
+		);
+		
+		select *  from  Medicos
+
+-- 5. nome, CPF e idade dos pacientes que têm consultas marcadas sempre para dias anteriores ao dia 16
+ 
+      select p.nome, p.idade from pacientes as p
+	  inner join Consultas as c on p.codp = c.codp
+	  where c.codm in (
+	  
+		  select m.codm from Medicos as m
+		  where c.codm = m.codm and c.data < '2006-06-16'
+	  )
+	   
+	   select * from Consultas;
+
+-- Resolva o que se pede utilizando subconsultas ANY e/ou ALL:
+
+-- 1. números e andares de todos os ambulatórios, exceto o de menor capacidade
+    
+	select a.nroa, a.andar from Ambulatorios as a
+	where a.capacidade > any 
+	    (select max (a.capacidade)
+     from  ambulatorios as a
+     group by a.capacidade);
+	 
+-- 2. nome e idade dos médicos que têm consulta com a paciente Ana
+      
+	  select m.nome, m.idade from Medicos as m 
+	 inner join Consultas as c on m.codm = c.codm
+	 where c.codp = any
+	 (select p.codp from Pacientes as p
+	  where c.codp = p.codp and p.nome = 'Ana')
+	  
+
+-- 3. nome e a idade do médico mais jovem (sem usar função MIN!)
+
+   
+   select m.nome, m.idade from medicos as m
+   where m.idade <= all 
+   ( select m.idade from medicos as m )
+	
+	
+ -- 4.nome e CPF dos pacientes com consultas marcadas para horários anteriores a
+ -- todos os horários de consultas marcadas para o dia 12 de Novembro de 2006
+ 
+       
+  select distinct p.nome, p.Cpf from consultas as c
+  inner join pacientes as p on p.codp = c.codp
+  where c.hora <= all(
+  select hora from consultas as c where data < '2006/11/12'
+  );
+    
+-- 5 .nome e CPF dos médicos que não atendem em ambulatórios com capacidade
+-- superior à capacidade dos ambulatórios do segundo andar
+
+   select m.nome, m.Cpf FROM Medicos as m
+   inner join Ambulatorios AS a ON m.nroa = a.nroa WHERE  a.capacinade NOT IN
+   ( select  m.)
+   
+   SELECT m.nome, m.Cpf FROM ambulatorios AS a 
+   INNER JOIN medicos AS m ON m.nroa = a.nroa WHERE a.capacidade NOT IN
+   ( SELECT m.codm FROM medicos AS m 
+	INNER JOIN ambulatorios AS a ON a.nroa = m.nroa WHERE a.capacidade >= ALL
+	( SELECT capacidade FROM ambulatorios WHERE andar = 2));
+
+
+  -- Resolva o que se pede utilizando subconsultas EXISTS
+  
+  -- 1. nome e CPF dos médicos que também são pacientes do hospital
+  
+  select m.nome , m.Cpf from Medicos as m
+  where Exists (
+   
+	  select p.nome from Pacientes as p
+	  where m.nome = p.nome
+  )
+  
+  -- 2. nome e idade dos médicos que têm consulta com a paciente Ana
+  
+   select m.nome , m.idade from Medicos as m
+   inner join Consultas as c on m.codm = c.codm 
+  where Exists (
+   
+	  select p.codp from Pacientes as p
+	  where c.codp = p.codp and p.nome = 'Ana'
+  )
+  
+  -- 3 número do ambulatório com a maior capacidade (sem usar função MAX!)
+  
+     select DISTINCT a.nroa,  from Ambulatorios as a
+     where a. capacidade >= all (
+     select a.capacidade from Ambulatorios as a	 
+   )
+   
+   -- 4. nome e CPF dos médicos que têm consultas marcadas com todos os pacientes
+   
+       select DISTINCT m.nome, m.Cpf from Medicos as m
+	   inner join Consultas as c on m.codm = c.codp
+	   where Exists (
+		   
+	     select * from Pacientes as p
+		   inner join Consultas as c on c.codp = p.codp
+	   )
+	   
+	   select * from Consultas
+	   
+	 -- 5. nome e CPF dos médicos ortopedistas que têm consultas marcadas com todos os
+     -- pacientes de Florianópolis 
+	 
+	select DISTINCT m.nome, m.Cpf from Medicos as m
+	 inner join Consultas as c on m.codm = c.codm
+	 where m.especialidade = 'ortopedia' and Exists(
+		 
+	 select * from Pacientes as p
+	 inner join Consultas as c on c.codp = p.codp
+	  where p.cidade = 'Floriopolis'	  
+	 );

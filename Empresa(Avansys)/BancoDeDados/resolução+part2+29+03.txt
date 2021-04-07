@@ -1,0 +1,67 @@
+ -- Realização de Atividade usando Select
+  
+  -- 1. Buscar o nome e o CPF dos médicos com menos de 40 anos ou com especialidade
+    -- diferente de traumatologia.
+	
+	select nome, Cpf , idade from Medicos where idade < 40
+	order by idade;
+ 
+  -- 2. Buscar todos os dados das consultas marcadas no período da tarde após o dia ?
+   -- 19/06/2006
+   
+   select * from Consultas where hora < '12:00' or data > '19/06/2006'
+   order by codm;
+   
+   -- 3. Buscar o nome e a idade dos pacientes que não residem em Florianópolis ?
+   
+   select nome, idade from Pacientes where cidade != 'Florionopolis' order by nome;
+   
+   -- 4 .Buscar a hora das consultas marcadas antes do dia 14/06/2006 e depois do dia 20/06/2006?
+   
+       Select hora, data from Consultas where data < '2006/06/14' or data > '2006/06/20' order by data;
+   
+  -- 5. Buscar o nome e a idade (em meses) dos pacientes?
+  
+  select nome, idade, (idade*12) as Meses from Pacientes;
+  
+  -- 6. Em quais cidades residem os funcionários?
+  
+  select cidade from funcionarios;
+  
+  -- 7 . Qual o menor e o maior salário dos funcionários da Florianópolis?
+  
+select min(salario) as minimo,max(salario) as maximo
+from Funcionarios where cidade = 'Florianopolis';
+  
+  
+  -- 10. Qual o horário da última consulta marcada para o dia 13/06/2006?
+  
+  
+  select max(hora) as horaUltima from Consultas where data = '2006/06/13';
+  
+  -- 11. Qual a média de idade dos médicos e o total de ambulatórios atendidos por eles?
+   select sum(idade + idade) as TotalIdade from Medicos; 
+   select sum(Capacidade) as Total from Ambulatorios; 
+  
+  --12 . Buscar o código, o nome e o salário líquido dos funcionários. O salário líquido é
+ -- obtido pela diferença entre o salário cadastrado menos 20% deste mesmo salário
+ 
+ select nome , salario, salario - (salario*0.20) as SalarioLiquido  from Funcionarios;
+ 
+ -- 13. Buscar o nome dos funcionários que terminam com a letra “a”
+ 
+ select nome from Funcionarios where nome like '%a';
+ 
+ -- 14.  Buscar o nome e CPF dos funcionários que não possuam a seqüência “00000” em seus CPFs
+ 
+ select nome , Cpf from funcionarios where Cpf != '00000';
+ 
+ 
+ -- 15.   Buscar o nome e a especialidade dos médicos cuja segunda e a última letra de seus nomes seja a letra “o”
+ 
+ select nome, especialidade from Medicos where nome like '%o';
+ 
+ -- 16. Buscar os códigos e nomes dos pacientes com mais de 25 anos que estão com tendinite, fratura, gripe e sarampo
+ 
+ select nome, idade , doenca from Pacientes where idade >= 25 and doenca = 'tendinite' or doenca = 'fratura'
+ or doenca = 'grite' or doenca = 'sapampo';

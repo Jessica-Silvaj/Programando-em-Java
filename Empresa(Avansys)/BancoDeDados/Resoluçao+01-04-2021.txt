@@ -1,0 +1,132 @@
+-- Atividade 01-04-2021
+ -- Buscar o que se pede utilizando subconsultas na cláusula FROM:
+
+  -- 1. todos os dados das consultas marcadas para a médica Maria
+  
+       select c.* from Consultas as c
+	   join ( select Medicos.codm from Medicos 
+			  where Medicos.nome = 'Maria') as m
+			  on c.codm = m.codm
+	
+ -- 2. código e nome dos pacientes com consulta marcada para horários após às 14 horas
+ 
+       select p.codp, p.nome from Pacientes as p
+	   join (select Consultas.codp from Consultas
+			 where Consultas.hora > '14:00') as c
+			 on p.codp = c.codp
+    
+ -- 3. nome e cidade dos pacientes que têm consultas marcadas com ortopedistas
+      	  		  
+	  select DISTINCT p.nome, p.cidade from Pacientes as p
+	  inner join Consultas as c on p.codp = c.codp
+	  join (select medicos.codm from Medicos 
+		   where medicos.especialidade = 'ortopedia') as m
+		   on c.codm = m.codm  
+		   
+ -- 4. nome e CPF dos pacientes de Florianópolis que não têm consultas com o médico João
+
+      select distinct p.nome, p.Cpf from Pacientes as p
+	  inner join Consultas as c on p.codp = c.codp
+	  join (select medicos.codm from Medicos
+		   where medicos.nome <> 'João'and medicos.nroa is not null) as m
+		   on c.codm = m.codm where p.cidade <> 'Floriopolis'
+		   
+  -- Buscar o que se pede utilizando ORDER BY e GROUP BY:
+  
+-- 1. os dados de todos os funcionários ordenados pelo salário (decrescente) e pela idade
+--(crescente). Buscar apenas os três primeiros funcionários nesta ordem
+
+     select * from Funcionarios
+	order by salario desc, idade asc limit 3
+
+
+-- 2. o nome dos médicos e o número e andar do ambulatório onde eles atendem, ordenado pelo número do ambulatório
+
+   select m.nome, a.nroa, a.andar from Medicos as m
+     inner join Ambulatorios as a on 
+	  m.nroa = a.nroa order by a.nroa
+	  
+	  --Usando from
+	  select m.nome,  a.nroa, a.andar from Medicos as m
+	   join ( select Ambulatorios.nroa, Ambulatorios.andar  from Ambulatorios 
+			  order by Ambulatorios.nroa  asc) as a
+			  on m.nroa = a.nroa
+			  
+-- 3. o nome do médico e o nome dos pacientes com consulta marcada, ordenado pela data e pela hora.
+     
+	 select  m.nome, p.nome from Medicos as m 
+      inner join Consultas as c on
+	   m.codm = c.codm inner join Pacientes as p on
+	    c.codp = p.codp order by c.data,c.hora
+		
+		-- usando from
+	  select  m.nome, p.nome from Medicos as m 
+      inner join Consultas as c on
+	   m.codm = c.codm  join 
+	   (select * from Pacientes ) as p 
+	   on c.codp = p.codp order by c.data,c.hora
+		
+			 
+select *  from pacientes
+
+-- 4.idades dos médicos e o total de médicos com a mesma idade
+
+    select count(*),idade from medicos group by idade
+   
+   select * from medicos
+   
+-- 5. datas e o total de consultas em cada data, para horários após às 12 hs.
+
+  select count(*),c.data from consultas as c
+  where c.hora > '12:00' group by data
+  
+  select * from consultas;
+
+-- 6. andares onde existem ambulatórios e a média de capacidade por andar
+
+  select count(*),c.data from consultas as c
+  where c.hora <= '12:00'group by data
+	 
+
+-- 7.andares onde existem ambulatórios cuja média de capacidade no andar seja >= 40
+
+   select AVG(capacidade)::numeric (10,2) ,andar from ambulatorios 
+	group by andar
+	
+
+-- 8 .nome dos médicos que possuem mais de uma consulta marcada	
+
+   select m.nome from Medicos as m
+   join ( select * from consultas ) as c
+       on m.codm = c.codm where c.codm > 1
+	   group by m.nome
+  
+  -- Realizar as seguintes atualizações:
+  
+ -- 1. passar para às 19hs todas as consultas marcadas para a paciente Ana
+ 
+    UPDATE consultas AS c
+SET hora = '19:00'
+FROM (select * from pacientes where nome = 'Ana') AS p
+WHERE p.codp = c.codp
+
+ -- 2. excluir os pacientes que não possuem consultas marcadas
+
+	DELETE FROM Pacientes WHERE codP NOT IN (SELECT codp FROM consultas);
+
+ -- 3. passar para 21/11/2006 todas as consultas do médico Pedro marcadas antes do meio-dia
+      
+	  	UPDATE consultas AS c SET data = '21-11-2006' FROM medico AS m
+                WHERE m.codm = c.codm AND m.nome = 'Pedro' and c.hora < '12:00';
+ 
+ -- 4 o ambulatório 4 foi transferido para o mesmo andar do ambulatório 1 e sua capacidade é agora
+ -- o dobro da capacidade do ambulatório de maior capacidade da clínica
+   
+           update ambulatorios
+set andar = (select ambu.andar from ambulatorios as ambu where ambu.nroa = 1),
+	capacidade = (select ambu.capacidade from ambulatorios as ambu where ambu.capacidade >=all(select ambu.capacidade from ambulatorios as ambu))*2
+where nroa = 4;
+              
+	 
+		
+

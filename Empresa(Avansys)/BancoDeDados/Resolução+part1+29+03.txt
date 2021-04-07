@@ -1,0 +1,178 @@
+ create table Ambulatorios (
+  nroa integer,
+  andar numeric(3)	not null,
+  capacidade smallint,
+	 
+	 primary key (nroa)
+ );
+ 
+ create table Medicos ( 
+  codm integer,
+  nome varchar(40) not null,
+  idade smallint not null,
+  especialidade char(20),
+   Cpf numeric(11) unique,
+   cidade varchar(30), 
+  nroa integer,
+	 
+	 primary key (codm)
+ );
+ 
+ create table Pacientes (
+   codp integer,
+	nome varchar(40) not null,
+	idade smallint,
+	 cidade char(30),
+	 Cpf numeric(11) unique,
+	doenca varchar(40) not null,
+	 
+	 primary key(codp)
+	 
+ );
+ 
+ 
+  create table Funcionarios(
+   codf integer,
+	nome varchar(40) not null,
+	idade smallint,
+	 cidade char(30),
+	 Cpf numeric(11) unique,
+	salario numeric(10),
+	  cargo varchar(20),
+	  
+	 primary key(codf)
+	 
+ );
+ 
+ create table Consultas (
+  codm integer,
+  codp integer,
+	 data date,
+	 hora time,
+	 
+	 primary key (codm ,data,hora)
+	 
+
+ );
+ 
+ drop table Consultas;
+  
+  -- criar uma coluna nroa int
+alter table Funcionarios add column nroa integer;
+ 
+ -- criar indices
+ 
+ create unique index Cpf on Medicos (Cpf);
+ 
+ create index doenca on Pacientes (doenca);
+ 
+ --Remover o indice
+ 
+ drop index doenca;
+ 
+ --Remover as colunas carga e nroa da tabela  funcionarios
+ alter table Funcionarios drop column cargo;
+ alter table Funcionarios drop nroa;
+ 
+ -- inserir valores da tabelas
+ 
+ --Ambularotio
+ 
+ insert into Ambulatorios(nroa,andar,capacidade) values 
+ (1,1,30),
+ (2,1,50),
+ (3,2,40),
+  (4,2,25),
+  (5,2,55);
+  
+  select * from Ambulatorios;
+  
+  -- Medicos
+  
+  insert into Medicos (codm, nome, idade, especialidade, Cpf,cidade,nroa) values
+  (1, 'João', 40, 'ortopedia', 10000100000, 'Florianopolis', 1) ,
+  (2, 'Maria',42, 'traumatologia',10000110000,'Blumenau',2),
+  (3,'Pedro',51,'pediatria',11000100000,'São josé',2),
+  (4,'Carlos',28,'ortopedia',11000110000,'Joinville', null),
+  (5,'Marcia',33,'neurologia',11000111000, 'Biguacu',3);
+  
+  select * from Medicos;
+  
+  -- Pacientes
+  
+  insert into Pacientes (codp , nome, idade,cidade,Cpf,doenca) values
+  (1,'Ana',20,'Floriopolis',20000200000,'gripe'),
+  (2,'Paulo',24,'Palhoca',20000220000,'fratura'),
+  (3,'Lucia',30,'Biguacu',22000200000,'tendinite'),
+  (4,'Carlos',28,'Joinviller',11000110000,'sarampo');
+  
+  select * from Pacientes;
+  
+  
+  -- Funcionarios
+  
+  insert into Funcionarios (codf , nome, idade, cidade , salario, Cpf) values
+  (1,'Rita',32,'São josé',1200,20000100000),
+  (2,'Maria',55,'Palhoca',1220,30000110000),
+  (3,'Caio',45,'Florianopolis',1100,41000100000),
+  (4,'Calos',44,'Florianopolis',1200,51000110000),
+  (5,'Paula',33,'Florianopolis',2500,61000111000);
+  
+  select * from Funcionarios;
+  
+  --Consultas
+  
+  insert into Consultas (codm,codp,data,hora) values
+  (1,1,'2006/06/12','14:00'),
+  (1,4,'2006/06/13','10:00'),
+  (2,1,'2006/06/13','9:00'),
+  (2,2,'2006/06/13','11:00'),
+  (2,3,'2006/06/14','14:00'),
+  (2,4,'2006/06/14','17:00'),
+  (3,1,'2006/06/19', '18:00'),
+  (3,3,'2006/06/12','10:00'),
+  (3,4,'2006/06/19','13:00'),
+  (4,4,'2006/06/20','13:00'),
+  (4,4,'2006/06/22','19:30');
+  
+  select * from Consultas;
+  
+  drop table Consultas;
+  ----- Resolução da atividade -----
+  
+  -- 1. O paciente Paulo mudou-se para Ilhota
+  
+  update Pacientes set cidade = 'Ilhota' where nome = 'Paulo';
+  select * from Pacientes order by codp;
+  
+  -- 2. A consulta do médico 1 com o paciente 4 passou para às 12:00 horas do dia 4 de Julho de 2006
+  
+  update Consultas set data = '2006/07/04', hora = '12:00' where codm = 1 and codp = 4;
+  select * from Consultas order by codm;
+  
+  -- 3.A paciente Ana fez aniversário e sua doença agora é cancer
+  update Pacientes set doenca = 'Cancer' where nome = 'Ana';
+  select * from Pacientes order by codp;
+  
+  -- 4. A consulta do médico Pedro (codf = 3) com o paciente Carlos (codf = 4) passou para uma hora e meia depois
+  
+  update Consultas set hora = '14:30' where codm = 3 and codp = 4;
+  select * from  Consultas order by codm;
+
+-- 5. O funcionário Carlos (codf = 4) deixou a clínica
+
+delete from Funcionarios where codf = 4;
+select * from Funcionarios order by codf;
+
+-- 6. As consultas marcadas após as 19 horas foram canceladas
+ update Consultas set hora = null where hora > '19:00';
+ select * from Consultas order by  hora;
+  
+-- 7. Os pacientes com câncer ou idade inferior a 10 anos deixaram a clínica
+ delete from Pacientes where doenca = 'Cancer' or idade < 10;
+ select * from Pacientes;
+ 
+ -- 8. Os médicos que residem em Biguacu e Palhoca deixaram a clinica
+ delete from Funcionarios where cidade = 'Biguacu' and cidade = 'Palhoca';
+ delete from Medicos where cidade = 'Biguacu' and cidade = 'Palhoca';
+ select * from Medicos;
